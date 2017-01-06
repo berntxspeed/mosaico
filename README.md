@@ -1,3 +1,9 @@
+# To Get Running Locally - as /dist is used in bluenile-app
+
+$sudo npm install --save-dev
+$sudo grunt build
+(copy updated /dist directory into /static/mosaico/dist in bluenile-app) 
+
 # Mosaico - Responsive Email Template Editor
 
 Mosaico is a JavaScript library (or maybe a single page application) supporting the editing of email templates.

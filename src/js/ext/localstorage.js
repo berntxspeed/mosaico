@@ -4,21 +4,36 @@ var console = require("console");
 var ko = require("knockout");
 var $ = require("jquery");
 
-var lsLoader = function(hash_key, emailProcessorBackend) {
-  var mdStr = global.localStorage.getItem("metadata-" + hash_key);
-  if (mdStr !== null) {
-    var model;
-    var td = global.localStorage.getItem("template-" + hash_key);
-    if (td !== null) model = JSON.parse(td);
-    var md = JSON.parse(mdStr);
-    return {
-      metadata: md,
-      model: model,
-      extension: lsCommandPluginFactory(md, emailProcessorBackend)
-    };
-  } else {
-    throw "Cannot find stored data for "+hash_key;
-  }
+/* MODIFIED BY Bluenile to point to backend service instead of using browser local storage */
+/* guided by this gist https://gist.github.com/mistaguy/25ae3b8ec8205ea0f3e8   */
+var lsLoader = function(hash_key, emailProcessorBackend, saveProcessorBackend) {
+
+  //var mdStr = global.localStorage.getItem("metadata-" + hash_key);
+  var mdStr, td;
+  var postUrl = saveProcessorBackend;
+  $.post(postUrl, {
+    action: 'load',
+    key: hash_key
+  }, null, 'html').success(function(){
+
+    mdStr = JSON.parse(arguments[0]);
+    td = JSON.parse(arguments[1]);
+    console.log(mdStr);
+    console.log(td);
+
+    if (mdStr !== null && td !== null) {
+      var model = JSON.parse(td);
+      var md = JSON.parse(mdStr);
+      return {
+        metadata: md,
+        model: model,
+        extension: lsCommandPluginFactory(md, emailProcessorBackend)
+      };
+    } else {
+      throw "Cannot find stored data for "+hash_key;
+    }
+
+  });
 };
 
 var lsCommandPluginFactory = function(md, emailProcessorBackend) {

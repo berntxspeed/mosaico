@@ -126,7 +126,7 @@ var start = function(options, templateFile, templateMetadata, jsorjson, customEx
 
 var initFromLocalStorage = function(options, hash_key, customExtensions) {
   try {
-    var lsData = localStorageLoader(hash_key, options.emailProcessorBackend);
+    var lsData = localStorageLoader(hash_key, options.emailProcessorBackend, options.saveProcessorBackend);
     var extensions = typeof customExtensions !== 'undefined' ? customExtensions : [];
     extensions.push(lsData.extension);
     var template = _canonicalize(lsData.metadata.template);
