@@ -132,7 +132,7 @@ var initFromLocalStorage = function(options, hash_key, customExtensions) {
       lsData = result;
       var extensions = typeof customExtensions !== 'undefined' ? customExtensions : [];
       extensions.push(lsData.extension);
-      var template = _canonicalize(lsData.model.template);
+      var template = _canonicalize(lsData.metadata.template);
       start(options, template, lsData.metadata, lsData.model, extensions);
     } catch (e) {
       console.error("TODO not found ", hash_key, e);
