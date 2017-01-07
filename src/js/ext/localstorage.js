@@ -11,8 +11,8 @@ var lsLoader = function(hash_key, emailProcessorBackend, templateLoader, callbac
   templateLoader(hash_key, function(err, mdStr, td){
     if(err){ throw "Error accessing stored data for "+hash_key+" : errror-> "+err; }
     if (mdStr !== null && td !== null) {
-      var model = JSON.parse(td);
-      var md = JSON.parse(mdStr);
+      var model = td;
+      var md = mdStr;
       var result = {
         metadata: md,
         model: model,
