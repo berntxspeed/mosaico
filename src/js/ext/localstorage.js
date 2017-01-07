@@ -6,20 +6,21 @@ var $ = require("jquery");
 
 /* MODIFIED BY Bluenile to point to backend service instead of using browser local storage */
 /* guided by this gist https://gist.github.com/mistaguy/25ae3b8ec8205ea0f3e8   */
-var lsLoader = function(hash_key, emailProcessorBackend, templateLoader) {
+var lsLoader = function(hash_key, emailProcessorBackend, templateLoader, callback) {
 
   templateLoader(hash_key, function(err, mdStr, td){
     if(err){ throw "Error accessing stored data for "+hash_key+" : errror-> "+err; }
     if (mdStr !== null && td !== null) {
       var model = JSON.parse(td);
       var md = JSON.parse(mdStr);
-      return {
+      var result = {
         metadata: md,
         model: model,
         extension: lsCommandPluginFactory(md, emailProcessorBackend)
       };
+      callback(null, result);
     } else {
-      throw "Cannot find stored data for "+hash_key;
+      callback("Cannot find stored data for "+hash_key);
     }
   });
 

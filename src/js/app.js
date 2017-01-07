@@ -125,15 +125,19 @@ var start = function(options, templateFile, templateMetadata, jsorjson, customEx
 };
 
 var initFromLocalStorage = function(options, hash_key, customExtensions) {
-  try {
-    var lsData = localStorageLoader(hash_key, options.emailProcessorBackend, options.templateLoader);
-    var extensions = typeof customExtensions !== 'undefined' ? customExtensions : [];
-    extensions.push(lsData.extension);
-    var template = _canonicalize(lsData.metadata.template);
-    start(options, template, lsData.metadata, lsData.model, extensions);
-  } catch (e) {
-    console.error("TODO not found ", hash_key, e);
-  }
+  var lsData;
+  localStorageLoader(hash_key, options.emailProcessorBackend, options.templateLoader, function(err, result){
+    try {
+      if(err){ throw('problem loading from local storage: '+err); }
+      lsData = result;
+      var extensions = typeof customExtensions !== 'undefined' ? customExtensions : [];
+      extensions.push(lsData.extension);
+      var template = _canonicalize(lsData.metadata.template);
+      start(options, template, lsData.metadata, lsData.model, extensions);
+    } catch (e) {
+      console.error("TODO not found ", hash_key, e);
+    }
+  });
 };
 
 var init = function(options, customExtensions) {
